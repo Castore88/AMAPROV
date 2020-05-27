@@ -10,6 +10,8 @@ import amazoff_logo from "./amazoff-logo.svg";
 import widthdraw from "./withdraw.svg";
 import ComponenteProva from "./components/componenteProva/ComponenteProva"; */
 import Navbar from "./components/Nav/Navbar";
+import Info from "../src/components/home/info";
+import Deposito from "../src/components/home/deposito";
 
 import "./App.css";
 
@@ -39,22 +41,14 @@ class App extends Component {
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Amazoff.networks[networkId];
-      const instance = new web3.eth.Contract(
-        Amazoff.abi,
-        deployedNetwork && deployedNetwork.address
-      );
+      const instance = new web3.eth.Contract(Amazoff.abi, deployedNetwork && deployedNetwork.address);
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState(
-        { web3, accounts, contract: instance },
-        console.log(accounts[0])
-      );
+      this.setState({ web3, accounts, contract: instance }, console.log(accounts[0]));
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
+      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
       console.error(error);
     }
   };
@@ -103,6 +97,8 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
+        <Info />
+        <Deposito />
         {/* 
           Codice Originale per le prove
         
