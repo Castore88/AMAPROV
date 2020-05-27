@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import Amazoff from "./contracts/Amazoff.json";
 import getWeb3 from "./getWeb3";
-/*
-Import per le prove
-
-import { Header, ActionButton } from "./components";
-import elephant from "./elephant-savings.svg";
-import amazoff_logo from "./amazoff-logo.svg";
-import widthdraw from "./withdraw.svg";
-import ComponenteProva from "./components/componenteProva/ComponenteProva"; */
 import Navbar from "./components/Nav/Navbar";
 
 import "./App.css";
@@ -103,30 +95,6 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-        {/* 
-          Codice Originale per le prove
-        
-        <Header className="layout-header" logo={amazoff_logo}></Header>
-        <div className="layout-content">
-          <div className="button-row">
-            <ActionButton
-              icon={elephant}
-              label="Deposit"
-              id="deposita"
-              azione={this.deposita}
-            />
-
-            <ComponenteProva azione={this.convertiData} />
-            <h1>{this.state.giorno}</h1>
-
-            <ActionButton
-              iconClass="widthdraw-icon"
-              icon={widthdraw}
-              label="Withdraw"
-              azione={this.preleva}
-            />
-          </div>
-        </div> */}
       </div>
     );
   }
