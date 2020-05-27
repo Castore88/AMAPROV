@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import Amazoff from "./contracts/Amazoff.json";
 import getWeb3 from "./getWeb3";
-import { Header, ActionButton } from "./components";
-import elephant from "./elephant-savings.svg";
-import amazoff_logo from "./amazoff-logo.svg";
-import widthdraw from "./withdraw.svg";
+import Navbar from "./components/Nav/Navbar";
 
 import "./App.css";
 
@@ -16,9 +13,11 @@ class App extends Component {
       web3: null,
       accounts: null,
       contract: null,
+      giorno: 0,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
+    this.setFriday = this.setFriday.bind(this);
   }
 
   componentDidMount = async () => {
@@ -52,6 +51,11 @@ class App extends Component {
     }
   };
 
+  setFriday = async () => {
+    const { accounts, contract, giorno } = this.state;
+    await contract.methods.setBlackFriday(giorno).send({ from: accounts[0] });
+  };
+
   deposita = async () => {
     const { accounts, contract } = this.state;
 
@@ -77,29 +81,20 @@ class App extends Component {
     this.setState({ storageValue: response }); */
   };
 
+  convertiData = () => {
+    const data = document.getElementById("data").value;
+    const timestamp = Date.parse(data);
+    this.setState({ giorno: timestamp });
+    this.setFriday();
+  };
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <div className="App">
-        <Header className="layout-header" logo={amazoff_logo} />
-        <div className="layout-content">
-          <div className="button-row">
-            <ActionButton
-              icon={elephant}
-              label="Deposit"
-              id="deposita"
-              azione={this.deposita}
-            />
-            <ActionButton
-              iconClass="widthdraw-icon"
-              icon={widthdraw}
-              label="Withdraw"
-              azione={this.preleva}
-            />
-          </div>
-        </div>
+        <Navbar />
       </div>
     );
   }
