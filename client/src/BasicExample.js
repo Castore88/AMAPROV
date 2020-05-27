@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import App from "./App";
-import Login from "./pages/Login";
+import Login from "../src/pages/Login";
 
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
@@ -12,7 +12,7 @@ import Login from "./pages/Login";
 // making sure things like the back button and bookmarks
 // work properly.
 
-export default function Indice() {
+export default function BasicExample() {
   return (
     <Router>
       {/*

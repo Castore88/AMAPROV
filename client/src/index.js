@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import Indice from "./Indice";
+import BasicExample from "./BasicExample";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Indice />
+    <BasicExample />
   </React.StrictMode>,
   document.getElementById("root")
 );
