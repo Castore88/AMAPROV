@@ -14,6 +14,8 @@ class App extends Component {
       accounts: null,
       contract: null,
       giorno: 0,
+      balance: null,
+      rete: null,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
@@ -27,10 +29,21 @@ class App extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
+      const rete = await web3.eth.net.getNetworkType();
+      const balance = await web3.eth.getBalance(accounts[0], function (
+        error,
+        wei
+      ) {
+        if (!error) {
+          var balance = web3.utils.fromWei(wei, "ether");
+          console.log(balance + " ETH");
+        }
+      });
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Amazoff.networks[networkId];
+
       const instance = new web3.eth.Contract(
         Amazoff.abi,
         deployedNetwork && deployedNetwork.address
@@ -39,8 +52,8 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState(
-        { web3, accounts, contract: instance },
-        console.log(accounts[0])
+        { web3, accounts, balance, rete, contract: instance },
+        console.log(accounts[0], rete)
       );
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -89,12 +102,17 @@ class App extends Component {
   };
 
   render() {
+    const { accounts, rete, balance } = this.state;
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <div className="App">
         <Navbar />
+
+        <h1>{accounts[0]}</h1>
+        <h1>Ti trovi sulla rede di: {rete}</h1>
+        <h3>Possiedi: {balance}</h3>
       </div>
     );
   }
