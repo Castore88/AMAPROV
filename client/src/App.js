@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Amazoff from "./contracts/Amazoff.json";
 import getWeb3 from "./getWeb3";
 import Navbar from "./components/Nav/Navbar";
+import Info from "../src/components/home/info";
+import Deposito from "../src/components/home/deposito";
 
 import "./App.css";
 
@@ -109,10 +111,8 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
-
-        <h1>{accounts[0]}</h1>
-        <h1>Ti trovi sulla rede di: {rete}</h1>
-        <h3>Possiedi: {balance}</h3>
+        <Info bilancio={balance} rete={rete} indirizzo={accounts[0]} />
+        <Deposito />
       </div>
     );
   }
