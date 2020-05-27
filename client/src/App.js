@@ -112,7 +112,7 @@ class App extends Component {
       <div className="App">
         <Navbar />
         <Info bilancio={balance} rete={rete} indirizzo={accounts[0]} />
-        <Deposito />
+        <Deposito azione={this.deposita} />
       </div>
     );
   }
