@@ -1,0 +1,57 @@
+.Contenutox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #081828;
+  height: 100%;
+}
+
+.Connetti {
+  width: 250px;
+  height: 50px;
+  text-transform: uppercase;
+  border: none;
+  background-color: #f5841a;
+  color: white;
+  margin-top: 50px;
+}
+
+.Registrati {
+  width: 250px;
+  height: 50px;
+  text-transform: uppercase;
+  border: none;
+  background-color: #09a6ee;
+  color: white;
+  margin-bottom: 48px;
+  margin-top: 15px;
+}
+
+.Paragraffo {
+  width: 300px;
+
+  text-align: center;
+  margin-bottom: 50px;
+  border: solid 1px white;
+  padding: 10px;
+  color: white;
+  font-size: 22px;
+  margin-top: 50px;
+}
+
+.Metamask {
+  height: 100px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.Contenuto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Logo {
+  margin: 10px;
+}

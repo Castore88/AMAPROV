@@ -1,11 +1,15 @@
-html,
+/* html,
 body {
   height: 100%;
+  width: 100%;
 }
 
 #root {
   display: flex;
   height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .App {
@@ -15,6 +19,7 @@ body {
 .layout-header {
   height: 100px;
   width: 100%;
+  margin-bottom: 3%;
 }
 
 .layout-content {
@@ -36,5 +41,7 @@ body {
   align-items: center;
   padding: 20px;
   justify-content: space-around;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-direction: column;
 }
+ */
