@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import Amazoff from "./contracts/Amazoff.json";
 import getWeb3 from "./getWeb3";
+/*
+Import per le prove
+
 import { Header, ActionButton } from "./components";
 import elephant from "./elephant-savings.svg";
 import amazoff_logo from "./amazoff-logo.svg";
 import widthdraw from "./withdraw.svg";
+import ComponenteProva from "./components/componenteProva/ComponenteProva"; */
+import Navbar from "./components/Nav/Navbar";
+import Info from "../src/components/home/info";
+import Deposito from "../src/components/home/deposito";
 
 import "./App.css";
 
@@ -16,9 +23,11 @@ class App extends Component {
       web3: null,
       accounts: null,
       contract: null,
+      giorno: 0,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
+    this.setFriday = this.setFriday.bind(this);
   }
 
   componentDidMount = async () => {
@@ -32,24 +41,21 @@ class App extends Component {
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Amazoff.networks[networkId];
-      const instance = new web3.eth.Contract(
-        Amazoff.abi,
-        deployedNetwork && deployedNetwork.address
-      );
+      const instance = new web3.eth.Contract(Amazoff.abi, deployedNetwork && deployedNetwork.address);
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState(
-        { web3, accounts, contract: instance },
-        console.log(accounts[0])
-      );
+      this.setState({ web3, accounts, contract: instance }, console.log(accounts[0]));
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`
-      );
+      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
       console.error(error);
     }
+  };
+
+  setFriday = async () => {
+    const { accounts, contract, giorno } = this.state;
+    await contract.methods.setBlackFriday(giorno).send({ from: accounts[0] });
   };
 
   deposita = async () => {
@@ -77,13 +83,26 @@ class App extends Component {
     this.setState({ storageValue: response }); */
   };
 
+  convertiData = () => {
+    const data = document.getElementById("data").value;
+    const timestamp = Date.parse(data);
+    this.setState({ giorno: timestamp });
+    this.setFriday();
+  };
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <div className="App">
-        <Header className="layout-header" logo={amazoff_logo} />
+        <Navbar />
+        <Info />
+        <Deposito />
+        {/* 
+          Codice Originale per le prove
+        
+        <Header className="layout-header" logo={amazoff_logo}></Header>
         <div className="layout-content">
           <div className="button-row">
             <ActionButton
@@ -92,6 +111,10 @@ class App extends Component {
               id="deposita"
               azione={this.deposita}
             />
+
+            <ComponenteProva azione={this.convertiData} />
+            <h1>{this.state.giorno}</h1>
+
             <ActionButton
               iconClass="widthdraw-icon"
               icon={widthdraw}
@@ -99,7 +122,7 @@ class App extends Component {
               azione={this.preleva}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
