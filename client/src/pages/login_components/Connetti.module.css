@@ -15,6 +15,10 @@
   color: white;
   margin-top: 50px;
 }
+.linkConnetti {
+  text-decoration: none;
+  color: white;
+}
 
 .Registrati {
   width: 250px;

@@ -64,6 +64,10 @@ const Ul = styled.ul`
       background-color: #e92d2d;
       border: none;
     }
+    .disco-link {
+      text-decoration: none;
+      color: white;
+    }
   }
 `;
 
@@ -71,11 +75,19 @@ const RightNav = ({ open }) => {
   return (
     <Ul open={open}>
       <h4>Poi ottenere 1 ETH gratis solo utilizzando le rete di test </h4>
-      <a href="/">
+      <a
+        href="https://faucet.metamask.io/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <button className="eth">Ottieni 1 ETH </button>
       </a>
       <button className="storico">Storico cassaforti</button>
-      <button className="disco">Disconnettiti</button>
+      <button className="disco">
+        <a className="disco-link" href="/">
+          Disconnettiti
+        </a>
+      </button>
     </Ul>
   );
 };

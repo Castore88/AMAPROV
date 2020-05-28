@@ -7,7 +7,9 @@ class Connetti extends Component {
     return (
       <div>
         <button className={classes.Connetti}>
-          <Link to="/home">Connettiti a Metamask</Link>
+          <Link className={classes.linkConnetti} to="/home">
+            Connettiti a Metamask
+          </Link>
         </button>
       </div>
     );

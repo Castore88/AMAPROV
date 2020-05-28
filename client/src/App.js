@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import Amazoff from "./contracts/Amazoff.json";
 import getWeb3 from "./getWeb3";
-import Navbar from "./components/Nav/Navbar";
+/* import Navbar from "./components/Nav/Navbar";
 import Info from "../src/components/home/info";
-import Deposito from "../src/components/home/deposito";
+import Deposito from "../src/components/home/deposito"; */
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import CreaDeposito from "./pages/CreaDeposito";
+import Home from "./pages/Home";
 
 import "./App.css";
 
@@ -22,6 +26,7 @@ class App extends Component {
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
     this.setFriday = this.setFriday.bind(this);
+    this.controlla = this.controlla.bind(this);
   }
 
   componentDidMount = async () => {
@@ -37,8 +42,8 @@ class App extends Component {
         wei
       ) {
         if (!error) {
-          var balance = web3.utils.fromWei(wei, "ether");
-          console.log(balance + " ETH");
+          var eth = web3.utils.fromWei(wei, "ether");
+          console.log(eth + " ETH");
         }
       });
 
@@ -54,7 +59,13 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState(
-        { web3, accounts, balance, rete, contract: instance },
+        {
+          web3,
+          accounts,
+          balance: Math.round(web3.utils.fromWei(balance, "ether"), 4),
+          rete,
+          contract: instance,
+        },
         console.log(accounts[0], rete)
       );
     } catch (error) {
@@ -83,6 +94,21 @@ class App extends Component {
     // Update state with the result.
     this.setState({ storageValue: response }); */
   };
+
+  controlla = async () => {
+    const { contract } = this.state;
+
+    // Stores a given value, 5 by default.
+    const amt = await contract.methods.getBalance().call();
+    console.log(amt);
+
+    // Get the value from the contract to prove it worked.
+    /* const response = await contract.methods.get().call();
+
+    // Update state with the result.
+    this.setState({ storageValue: response }); */
+  };
+
   preleva = async () => {
     const { accounts, contract } = this.state;
 
@@ -109,11 +135,28 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App">
-        <Navbar />
-        <Info bilancio={balance} rete={rete} indirizzo={accounts[0]} />
-        <Deposito />
-      </div>
+      <Router>
+        {/*
+            A <Switch> looks through all its children <Route>
+            elements and renders the first one whose path
+            matches the current URL. Use a <Switch> any time
+            you have multiple routes, but you want only one
+            of them to render at a time
+          */}
+        <Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+
+          <Route exact path="/home">
+            <Home accounts={accounts} rete={rete} balance={balance} />
+          </Route>
+
+          <Route path="/Deposita">
+            <CreaDeposito />
+          </Route>
+        </Switch>
+      </Router>
     );
   }
 }
