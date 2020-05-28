@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import Amazoff from "./contracts/Amazoff.json";
 import getWeb3 from "./getWeb3";
-import Navbar from "./components/Nav/Navbar";
+/* import Navbar from "./components/Nav/Navbar";
 import Info from "../src/components/home/info";
-import Deposito from "../src/components/home/deposito";
+import Deposito from "../src/components/home/deposito"; */
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import CreaDeposito from "./pages/CreaDeposito";
+import Home from "./pages/Home";
 
 import "./App.css";
 
@@ -134,32 +135,28 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
-      <div className="App">
-        <Navbar />
-        <Info bilancio={balance} rete={rete} indirizzo={accounts[0]} />
-        <Deposito />
-
-        <Router>
-          {/*
+      <Router>
+        {/*
             A <Switch> looks through all its children <Route>
             elements and renders the first one whose path
             matches the current URL. Use a <Switch> any time
             you have multiple routes, but you want only one
             of them to render at a time
           */}
-          <Switch>
-            <Route exact path="/">
-              <Login />
-            </Route>
-            <Route exact path="/home">
-              <App accounts={accounts} rete={rete} balance={balance} />
-            </Route>
-            <Route path="/Deposita">
-              <CreaDeposito />
-            </Route>
-          </Switch>
-        </Router>
-      </div>
+        <Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+
+          <Route exact path="/home">
+            <Home accounts={accounts} rete={rete} balance={balance} />
+          </Route>
+
+          <Route path="/Deposita">
+            <CreaDeposito />
+          </Route>
+        </Switch>
+      </Router>
     );
   }
 }
