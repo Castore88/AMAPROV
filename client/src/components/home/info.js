@@ -7,6 +7,7 @@ class Info extends Component {
     console.log(this.props);
     return (
       <div className={classes.Info}>
+        <h2>Rete Ethereum</h2>
         <h3 id="rete" className={classes.Rete}>
           {this.props.rete}
         </h3>

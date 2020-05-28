@@ -16,8 +16,10 @@
 }
 
 .Address {
-  border: solid 1px #707070;
-  width: 300px;
+  padding-top: 8px;
+  overflow: auto;
+  background-color: white;
+  width: 350px;
   height: 40px;
   text-align: center;
   margin: 0px;
@@ -25,29 +27,31 @@
 }
 
 .Balance {
-  border: solid 1px #707070;
-  width: 100px;
+  overflow: auto;
+  background-color: white;
+  width: 150px;
   height: 40px;
   text-align: center;
   margin: 0px;
   color: gray;
   margin-bottom: 20px;
+  padding-top: 8px;
 }
 
 .Rete {
-  border: solid 1px #707070;
-  width: 300px;
+  background-color: white;
+  width: 150px;
   height: 40px;
   text-align: center;
   margin: 0px;
   color: gray;
-  margin-top: 20px;
-  border-radius: 25px;
+  padding-top: 8px;
 }
 
 h2 {
   font-weight: 400;
-  color: gray;
+  color: #556080;
+  margin: 15px;
 }
 
 .Crea {
@@ -64,5 +68,5 @@ h2 {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  margin-top: 80px;
+  margin-top: 50px;
 }
