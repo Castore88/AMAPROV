@@ -26,7 +26,11 @@ const Nav = styled.nav`
 
   i {
     font-size: 35px;
-    display: none;
+    top: 10px;
+    position: absolute;
+    left: 18px;
+    
+}
   }
 `;
 
