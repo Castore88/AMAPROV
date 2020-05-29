@@ -3062,12 +3062,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xcc6678E3a552355D5EEe0A996836A6572f956276",
-      "transactionHash": "0x3380cba4bd379e75a198871559b0054fceda543dd6cabfcb3c6f3cbaccf8a391"
+      "address": "0x223E10fbf0b1315f38D62Df3047120AB64D2c76b",
+      "transactionHash": "0xca5938e6d078f2358f80db6e364c72d969d798c7d0cc12774e066b9e7c97636f"
     }
   },
   "schemaVersion": "3.1.0",
-  "updatedAt": "2020-05-27T21:42:30.389Z",
+  "updatedAt": "2020-05-29T07:41:20.578Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

@@ -6,7 +6,7 @@ import Info from "../src/components/home/info";
 import Deposito from "../src/components/home/deposito"; */
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import CreaDeposito from "./pages/CreaDeposito";
+
 import Home from "./pages/Home";
 
 import "./App.css";
@@ -145,15 +145,11 @@ class App extends Component {
           */}
         <Switch>
           <Route exact path="/">
-            <Login />
+            <Login connetti={this.componentDidMount} />
           </Route>
 
           <Route exact path="/home">
             <Home accounts={accounts} rete={rete} balance={balance} />
-          </Route>
-
-          <Route path="/Deposita">
-            <CreaDeposito />
           </Route>
         </Switch>
       </Router>

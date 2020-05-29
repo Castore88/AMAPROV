@@ -33,6 +33,7 @@ export default class Login extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <div>
         <div className={classes.Contenutox}>

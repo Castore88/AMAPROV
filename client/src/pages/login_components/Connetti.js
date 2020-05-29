@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 class Connetti extends Component {
   render() {
+    console.log(this.props);
     return (
       <div>
         <button className={classes.Connetti}>
