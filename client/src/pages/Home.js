@@ -6,12 +6,12 @@ import Deposito from "../components/home/deposito";
 export default class Home extends Component {
   render(props) {
     console.log(this.props);
-    const { accounts, rete, balance } = this.props;
+    const { accounts, rete, balance, showMe } = this.props;
     return (
       <div className="App">
-        <Navbar />
+        <Navbar showMe={showMe} />
         <Info bilancio={balance} rete={rete} indirizzo={accounts[0]} />
-        <Deposito />
+        <Deposito showMe={showMe} operation={this.props.operation} />
       </div>
     );
   }

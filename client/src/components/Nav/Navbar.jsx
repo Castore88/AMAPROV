@@ -1,8 +1,15 @@
-import React from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import Burger from "./Burger";
+import Title from "../../pages/login_components/Title";
 
-const Nav = styled.nav`
+class Navbar extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render(props) {
+    const Nav = styled.nav`
   width: 100%;
   height: 55px;
   border-bottom: 2px solid #f1f1f1;
@@ -33,18 +40,20 @@ const Nav = styled.nav`
 }
   }
 `;
+    console.log(this.props);
 
-const Navbar = () => {
-  return (
-    <Nav>
-      <div className="logo">
-        <i className="fas fa-angle-left"></i>
-        <h3>Home</h3>
-      </div>
+    return (
+      <Nav>
+        <div className="logo">
+          {this.props.showMe ? <i className="fas fa-angle-left"></i> : null}
 
-      <Burger />
-    </Nav>
-  );
-};
+          <h3></h3>
+        </div>
+
+        <Burger />
+      </Nav>
+    );
+  }
+}
 
 export default Navbar;
