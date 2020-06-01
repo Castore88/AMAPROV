@@ -148,7 +148,7 @@ class App extends Component {
           </Route>
 
           <Route path="/Deposita">
-            <CreaDeposito />
+            <CreaDeposito rete={rete} balance={balance} />
           </Route>
         </Switch>
       </Router>
