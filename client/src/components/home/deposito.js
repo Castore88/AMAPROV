@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import classes from "./Info.module.css";
+import { Link } from "react-router-dom";
 
 class Deposito extends Component {
   render() {
     return (
       <div className={classes.Creab}>
-        <button className={classes.Crea}>Crea il tuo deposito</button>
+        <button className={classes.Crea}>
+          {" "}
+          <Link to="/deposita">Crea il tuo deposito</Link>
+        </button>
       </div>
     );
   }

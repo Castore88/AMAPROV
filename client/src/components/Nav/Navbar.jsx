@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import Burger from "./Burger";
+import { Link } from "react-router-dom";
 
 const Nav = styled.nav`
   width: 100%;
   height: 55px;
   border-bottom: 2px solid #f1f1f1;
+  position: relative;
 
   /* 
   Potenziale Errore 
@@ -26,16 +28,28 @@ const Nav = styled.nav`
 
   i {
     font-size: 35px;
-    display: none;
+  }
+
+  .linkI {
+    position: absolute;
+    left: 19px;
+    color: white;
   }
 `;
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const showMe = props.showMe;
   return (
     <Nav>
+      {showMe ? (
+        <Link className="linkI" to="/home">
+          {" "}
+          <i className="fas fa-angle-left" />{" "}
+        </Link>
+      ) : null}
+
       <div className="logo">
-        <i className="fas fa-angle-left"></i>
-        <h3>Home</h3>
+        <h3>{props.children}</h3>
       </div>
 
       <Burger />

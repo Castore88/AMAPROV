@@ -6,8 +6,8 @@ import Info from "../src/components/home/info";
 import Deposito from "../src/components/home/deposito"; */
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import CreaDeposito from "./pages/CreaDeposito";
 import Home from "./pages/Home";
+import CreaDeposito from "./pages/CreaDeposito";
 
 import "./App.css";
 
@@ -22,14 +22,17 @@ class App extends Component {
       giorno: 0,
       balance: null,
       rete: null,
+      amt: 0,
+      bal: null,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
     this.setFriday = this.setFriday.bind(this);
-    this.controlla = this.controlla.bind(this);
+    this.operation = this.operation.bind(this);
+    this.connetti = this.connetti.bind(this);
   }
 
-  componentDidMount = async () => {
+  connetti = async () => {
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
@@ -46,6 +49,28 @@ class App extends Component {
           console.log(eth + " ETH");
         }
       });
+
+      if (
+        typeof window.ethereum !== "undefined" ||
+        typeof window.web3 !== "undefined"
+      ) {
+        // Web3 browser user detected. You can now use the provider.
+        const provider = window["ethereum"] || window.web3.current;
+
+        //Get access to Metamask
+
+        await provider
+          .enable()
+          .then((accounts) => {
+            alert("Accesso consentito");
+            console.log(accounts);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log("Metamask non presente");
+      }
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
@@ -85,41 +110,21 @@ class App extends Component {
   deposita = async () => {
     const { accounts, contract } = this.state;
 
-    // Stores a given value, 5 by default.
-    await contract.methods.deposit().send({ from: accounts[0] });
+    await contract.methods.deposit(this.state.amt).send({ from: accounts[0] });
     console.log("Hai cliccato sul link.");
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
-  };
-
-  controlla = async () => {
-    const { contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    const amt = await contract.methods.getBalance().call();
-    console.log(amt);
-
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
   };
 
   preleva = async () => {
     const { accounts, contract } = this.state;
 
-    // Stores a given value, 5 by default.
-    await contract.methods.withdraw().send({ from: accounts[0] });
+    await contract.methods.withdraw(this.state.amt).send({ from: accounts[0] });
     console.log("Hai cliccato sul link.");
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
+  };
 
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
+  bilancio = async () => {
+    const { contract } = this.state;
+    const bal = await contract.methods.getBalance().call();
+    await this.setState({ bal: bal });
   };
 
   convertiData = () => {
@@ -128,12 +133,25 @@ class App extends Component {
     this.setState({ giorno: timestamp });
     this.setFriday();
   };
+  // cambiare lo stato di amt dentro il componente
+
+  onValueChange(key, event) {
+    this.setState({ [key]: event.target.value });
+  }
+
+  // cambiare lo state di amt dentro il componente
+
+  //inizio
+  operation() {
+    this.setState({
+      showMe: true,
+    });
+  }
+  //------------fine-----------------------
 
   render() {
-    const { accounts, rete, balance } = this.state;
-    if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
-    }
+    const { accounts, rete, balance, web3 } = this.state;
+
     return (
       <Router>
         {/*
@@ -145,15 +163,33 @@ class App extends Component {
           */}
         <Switch>
           <Route exact path="/">
-            <Login />
+            <Login
+              connetti={this.connetti}
+              accounts={accounts}
+              rete={rete}
+              balance={balance}
+            />
           </Route>
 
           <Route exact path="/home">
-            <Home accounts={accounts} rete={rete} balance={balance} />
+            <Home
+              web3={web3}
+              accounts={accounts}
+              rete={rete}
+              balance={balance}
+              operation={this.operation}
+            />
           </Route>
 
           <Route path="/Deposita">
-            <CreaDeposito />
+            <CreaDeposito
+              preleva={this.preleva}
+              deposita={this.deposita}
+              bilancio={this.bilancio}
+              value={this.state.amt}
+              bal={this.state.bal}
+              onValueChange={this.onValueChange.bind(this, "amt")}
+            ></CreaDeposito>
           </Route>
         </Switch>
       </Router>
