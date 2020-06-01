@@ -4,14 +4,14 @@ import Info from "../components/home/info";
 import Deposito from "../components/home/deposito";
 
 export default class Home extends Component {
-  render(props) {
+  render() {
     console.log(this.props);
-    const { accounts, rete, balance, showMe } = this.props;
+    const { accounts, rete, balance } = this.props;
     return (
       <div className="App">
-        <Navbar showMe={showMe} />
+        <Navbar showMe={false}>Home</Navbar>
         <Info bilancio={balance} rete={rete} indirizzo={accounts[0]} />
-        <Deposito showMe={showMe} operation={this.props.operation} />
+        <Deposito />
       </div>
     );
   }

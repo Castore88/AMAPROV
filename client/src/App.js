@@ -22,13 +22,11 @@ class App extends Component {
       giorno: 0,
       balance: null,
       rete: null,
-      showMe: false,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
     this.setFriday = this.setFriday.bind(this);
     this.controlla = this.controlla.bind(this);
-    this.operation = this.operation.bind(this);
   }
 
   componentDidMount = async () => {
@@ -71,11 +69,7 @@ class App extends Component {
     }
   };
   //inizio
-  operation() {
-    this.setState({
-      showMe: true,
-    });
-  }
+
   //------------fine-----------------------
 
   setFriday = async () => {
@@ -150,11 +144,11 @@ class App extends Component {
           </Route>
 
           <Route exact path="/home">
-            <Home accounts={accounts} rete={rete} balance={balance} showMe={showMe} operation={this.operation} />
+            <Home accounts={accounts} rete={rete} balance={balance} />
           </Route>
 
           <Route path="/Deposita">
-            <CreaDeposito showMe={showMe} operation={this.operation} />
+            <CreaDeposito />
           </Route>
         </Switch>
       </Router>
