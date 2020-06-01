@@ -23,12 +23,11 @@ class App extends Component {
       balance: null,
       rete: null,
       amt: 0,
-      bal: null,
+      bal: 0,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
     this.setFriday = this.setFriday.bind(this);
-    this.operation = this.operation.bind(this);
     this.connetti = this.connetti.bind(this);
   }
 
@@ -36,7 +35,6 @@ class App extends Component {
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
-
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
       const rete = await web3.eth.net.getNetworkType();
@@ -108,10 +106,22 @@ class App extends Component {
   };
 
   deposita = async () => {
-    const { accounts, contract } = this.state;
+    const { accounts, web3 } = this.state;
 
-    await contract.methods.deposit(this.state.amt).send({ from: accounts[0] });
-    console.log("Hai cliccato sul link.");
+    web3.eth.sendTransaction(
+      {
+        from: accounts[0],
+        to: "0x223E10fbf0b1315f38D62Df3047120AB64D2c76b",
+        value: web3.utils.toWei(this.state.amt),
+      },
+      function (err, transactionHash) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(transactionHash);
+        }
+      }
+    );
   };
 
   preleva = async () => {
@@ -122,8 +132,16 @@ class App extends Component {
   };
 
   bilancio = async () => {
-    const { contract } = this.state;
-    const bal = await contract.methods.getBalance().call();
+    const { web3 } = this.state;
+    const bal = await web3.eth.getBalance(
+      "0x223E10fbf0b1315f38D62Df3047120AB64D2c76b",
+      function (error, wei) {
+        if (!error) {
+          var eth = web3.utils.fromWei(wei, "ether");
+          console.log(eth + " ETH");
+        }
+      }
+    );
     await this.setState({ bal: bal });
   };
 
@@ -140,14 +158,6 @@ class App extends Component {
   }
 
   // cambiare lo state di amt dentro il componente
-
-  //inizio
-  operation() {
-    this.setState({
-      showMe: true,
-    });
-  }
-  //------------fine-----------------------
 
   render() {
     const { accounts, rete, balance, web3 } = this.state;
@@ -177,7 +187,6 @@ class App extends Component {
               accounts={accounts}
               rete={rete}
               balance={balance}
-              operation={this.operation}
             />
           </Route>
 
