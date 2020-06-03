@@ -22,6 +22,8 @@ class App extends Component {
       giorno: 0,
       balance: null,
       rete: null,
+      amt: 0,
+      bal: 0,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
@@ -37,7 +39,10 @@ class App extends Component {
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
       const rete = await web3.eth.net.getNetworkType();
-      const balance = await web3.eth.getBalance(accounts[0], function (error, wei) {
+      const balance = await web3.eth.getBalance(accounts[0], function (
+        error,
+        wei
+      ) {
         if (!error) {
           var eth = web3.utils.fromWei(wei, "ether");
           console.log(eth + " ETH");
@@ -48,7 +53,10 @@ class App extends Component {
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Amazoff.networks[networkId];
 
-      const instance = new web3.eth.Contract(Amazoff.abi, deployedNetwork && deployedNetwork.address);
+      const instance = new web3.eth.Contract(
+        Amazoff.abi,
+        deployedNetwork && deployedNetwork.address
+      );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -64,12 +72,16 @@ class App extends Component {
       );
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
+      alert(
+        `Failed to load web3, accounts, or contract. Check console for details.`
+      );
       console.error(error);
     }
   };
   //inizio
-
+  onValueChange(key, event) {
+    this.setState({ [key]: event.target.value });
+  }
   //------------fine-----------------------
 
   setFriday = async () => {
@@ -78,16 +90,22 @@ class App extends Component {
   };
 
   deposita = async () => {
-    const { accounts, contract } = this.state;
+    const { accounts, web3 } = this.state;
 
-    // Stores a given value, 5 by default.
-    await contract.methods.deposit().send({ from: accounts[0] });
-    console.log("Hai cliccato sul link.");
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
+    web3.eth.sendTransaction(
+      {
+        from: accounts[0],
+        to: "0x223E10fbf0b1315f38D62Df3047120AB64D2c76b",
+        value: web3.utils.toWei(this.state.amt),
+      },
+      function (err, transactionHash) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(transactionHash);
+        }
+      }
+    );
   };
 
   controlla = async () => {
@@ -125,7 +143,8 @@ class App extends Component {
   };
 
   render() {
-    const { accounts, rete, balance, showMe } = this.state;
+    const { accounts, rete, balance } = this.state;
+    console.log(this.state.amt);
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -148,7 +167,13 @@ class App extends Component {
           </Route>
 
           <Route path="/Deposita">
-            <CreaDeposito rete={rete} balance={balance} />
+            <CreaDeposito
+              rete={rete}
+              balance={balance}
+              value={this.state.amt}
+              onValueChange={this.onValueChange.bind(this, "amt")}
+              deposita={this.deposita}
+            />
           </Route>
         </Switch>
       </Router>

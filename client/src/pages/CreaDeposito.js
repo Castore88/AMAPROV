@@ -7,13 +7,13 @@ import Invia from "../pages/componenti_deposito/invia";
 class CreaDeposito extends Component {
   render() {
     console.log(this.props);
-    const { rete, balance } = this.props;
+    const { rete, balance, value, onValueChange } = this.props;
     return (
       <div>
         <Navbar showMe={true}>Deposito</Navbar>
         <Rete rete={rete} balance={balance} />
-        <InputD />
-        <Invia />
+        <InputD value={value} onValueChange={onValueChange} />
+        <Invia deposita={this.props.deposita} />
       </div>
     );
   }
