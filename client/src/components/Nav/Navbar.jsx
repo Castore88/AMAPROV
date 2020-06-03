@@ -1,16 +1,22 @@
-import React from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import Burger from "./Burger";
+import Title from "../../pages/login_components/Title";
+import { Link } from "react-router-dom";
 
-const Nav = styled.nav`
+class Navbar extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render(props) {
+    const Nav = styled.nav`
   width: 100%;
   height: 55px;
   border-bottom: 2px solid #f1f1f1;
+  position: relative;
 
-  /* 
-  Potenziale Errore 
-  padding: 0 20px;
- */
+ 
 
   display: flex;
   justify-content: center;
@@ -26,21 +32,38 @@ const Nav = styled.nav`
 
   i {
     font-size: 35px;
-    display: none;
+  }
+
+  .LinkI {
+    font-size: 35px;
+    text-align:center;
+    position: absolute;
+    left: 18px;
+    color:white;
+    top: 3px;
+    
+}
   }
 `;
+    console.log(this.props);
+    const { showMe } = this.props;
 
-const Navbar = () => {
-  return (
-    <Nav>
-      <div className="logo">
-        <i className="fas fa-angle-left"></i>
-        <h3>Home</h3>
-      </div>
+    return (
+      <Nav>
+        <div className="logo">
+          {showMe ? (
+            <Link className="LinkI" to="/home">
+              <i className="fas fa-angle-left"></i>
+            </Link>
+          ) : null}
 
-      <Burger />
-    </Nav>
-  );
-};
+          <h3>{this.props.children}</h3>
+        </div>
+
+        <Burger />
+      </Nav>
+    );
+  }
+}
 
 export default Navbar;
