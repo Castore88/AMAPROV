@@ -26,13 +26,9 @@ class App extends Component {
       bal: 0,
     };
     this.deposita = this.deposita.bind(this);
-  }
-
-  componentDidUpdate(this.state.balance) {
-    // Utilizzo tipico (non dimenticarti di comparare le props):
-    if (this.state.balance !== propsPrecedenti.idUtente) {
-      this.fetchData(this.props.idUtente);
-    }
+    this.preleva = this.preleva.bind(this);
+    this.setFriday = this.setFriday.bind(this);
+    this.controlla = this.controlla.bind(this);
   }
 
   componentDidMount = async () => {
@@ -43,7 +39,10 @@ class App extends Component {
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
       const rete = await web3.eth.net.getNetworkType();
-      const balance = await web3.eth.getBalance(accounts[0], function (error, wei) {
+      const balance = await web3.eth.getBalance(accounts[0], function (
+        error,
+        wei
+      ) {
         if (!error) {
           var eth = web3.utils.fromWei(wei, "ether");
           console.log(eth + " ETH");
@@ -54,7 +53,10 @@ class App extends Component {
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Amazoff.networks[networkId];
 
-      const instance = new web3.eth.Contract(Amazoff.abi, deployedNetwork && deployedNetwork.address);
+      const instance = new web3.eth.Contract(
+        Amazoff.abi,
+        deployedNetwork && deployedNetwork.address
+      );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -70,12 +72,16 @@ class App extends Component {
       );
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
+      alert(
+        `Failed to load web3, accounts, or contract. Check console for details.`
+      );
       console.error(error);
     }
   };
   //inizio
-
+  onValueChange(key, event) {
+    this.setState({ [key]: event.target.value });
+  }
   //------------fine-----------------------
 
   setFriday = async () => {
@@ -85,6 +91,7 @@ class App extends Component {
 
   deposita = async () => {
     const { accounts, web3 } = this.state;
+
     web3.eth.sendTransaction(
       {
         from: accounts[0],
@@ -99,7 +106,6 @@ class App extends Component {
         }
       }
     );
-    window.location.reload();
   };
 
   controlla = async () => {
@@ -136,13 +142,9 @@ class App extends Component {
     this.setFriday();
   };
 
-  onValueChange(key, event) {
-    this.setState({ [key]: event.target.value }); // cambia valore di dove click
-  }
-
   render() {
-    console.log(this.state.amt);
     const { accounts, rete, balance } = this.state;
+    console.log(this.state.amt);
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -166,11 +168,11 @@ class App extends Component {
 
           <Route path="/Deposita">
             <CreaDeposito
-              deposita={this.deposita}
-              onValueChange={this.onValueChange.bind(this, "amt")}
-              value={this.state.amt}
               rete={rete}
               balance={balance}
+              value={this.state.amt}
+              onValueChange={this.onValueChange.bind(this, "amt")}
+              deposita={this.deposita}
             />
           </Route>
         </Switch>
