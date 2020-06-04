@@ -5,7 +5,9 @@ class Invia extends Component {
   render() {
     return (
       <div className={classes.Creab}>
-        <button className={classes.Crea}>Deposita</button>
+        <button onClick={this.props.deposita} className={classes.Crea}>
+          Deposita
+        </button>
       </div>
     );
   }

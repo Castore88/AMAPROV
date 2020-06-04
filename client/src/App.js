@@ -22,11 +22,17 @@ class App extends Component {
       giorno: 0,
       balance: null,
       rete: null,
+      amt: 0,
+      bal: 0,
     };
     this.deposita = this.deposita.bind(this);
-    this.preleva = this.preleva.bind(this);
-    this.setFriday = this.setFriday.bind(this);
-    this.controlla = this.controlla.bind(this);
+  }
+
+  componentDidUpdate(this.state.balance) {
+    // Utilizzo tipico (non dimenticarti di comparare le props):
+    if (this.state.balance !== propsPrecedenti.idUtente) {
+      this.fetchData(this.props.idUtente);
+    }
   }
 
   componentDidMount = async () => {
@@ -78,16 +84,22 @@ class App extends Component {
   };
 
   deposita = async () => {
-    const { accounts, contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    await contract.methods.deposit().send({ from: accounts[0] });
-    console.log("Hai cliccato sul link.");
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
+    const { accounts, web3 } = this.state;
+    web3.eth.sendTransaction(
+      {
+        from: accounts[0],
+        to: "0x3B8fd72BE95751F3991cc60EE18B778ABA56268E",
+        value: web3.utils.toWei(this.state.amt),
+      },
+      function (err, transactionHash) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(transactionHash);
+        }
+      }
+    );
+    window.location.reload();
   };
 
   controlla = async () => {
@@ -124,8 +136,13 @@ class App extends Component {
     this.setFriday();
   };
 
+  onValueChange(key, event) {
+    this.setState({ [key]: event.target.value }); // cambia valore di dove click
+  }
+
   render() {
-    const { accounts, rete, balance, showMe } = this.state;
+    console.log(this.state.amt);
+    const { accounts, rete, balance } = this.state;
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -148,7 +165,13 @@ class App extends Component {
           </Route>
 
           <Route path="/Deposita">
-            <CreaDeposito rete={rete} balance={balance} />
+            <CreaDeposito
+              deposita={this.deposita}
+              onValueChange={this.onValueChange.bind(this, "amt")}
+              value={this.state.amt}
+              rete={rete}
+              balance={balance}
+            />
           </Route>
         </Switch>
       </Router>

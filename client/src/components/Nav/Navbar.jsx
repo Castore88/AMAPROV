@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Burger from "./Burger";
-import Title from "../../pages/login_components/Title";
+
 import { Link } from "react-router-dom";
 
 class Navbar extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render(props) {
     const Nav = styled.nav`
   width: 100%;
