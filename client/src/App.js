@@ -24,6 +24,12 @@ class App extends Component {
       idCasseforti: 8,
     };
     this.deposita = this.deposita.bind(this);
+<<<<<<< HEAD
+=======
+    this.preleva = this.preleva.bind(this);
+    this.setFriday = this.setFriday.bind(this);
+    this.controlla = this.controlla.bind(this);
+>>>>>>> 7f72789c24e5669458469408dd3a7644368676b4
   }
 
   componentDidMount = async () => {
@@ -34,7 +40,10 @@ class App extends Component {
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
       const rete = await web3.eth.net.getNetworkType();
-      const balance = await web3.eth.getBalance(accounts[0], function (error, wei) {
+      const balance = await web3.eth.getBalance(accounts[0], function (
+        error,
+        wei
+      ) {
         if (!error) {
           var eth = web3.utils.fromWei(wei, "ether");
           console.log(eth + " ETH");
@@ -45,7 +54,10 @@ class App extends Component {
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Amazoff.networks[networkId];
 
-      const instance = new web3.eth.Contract(Amazoff.abi, deployedNetwork && deployedNetwork.address);
+      const instance = new web3.eth.Contract(
+        Amazoff.abi,
+        deployedNetwork && deployedNetwork.address
+      );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -61,7 +73,9 @@ class App extends Component {
       );
     } catch (error) {
       // Catch any errors for any of the above operations.
-      alert(`Failed to load web3, accounts, or contract. Check console for details.`);
+      alert(
+        `Failed to load web3, accounts, or contract. Check console for details.`
+      );
       console.error(error);
     }
   };
