@@ -24,6 +24,7 @@ class App extends Component {
       rete: null,
       amt: 0,
       bal: 0,
+      idCasseforti: 8,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
@@ -89,19 +90,37 @@ class App extends Component {
     await contract.methods.setBlackFriday(giorno).send({ from: accounts[0] });
   };
 
-  deposita = async () => {
-    const { accounts, web3 } = this.state;
+  preleva = async () => {
+    const { accounts, contract } = this.state;
 
-    web3.eth.sendTransaction(
+    await contract.methods.withdraw(this.state.idCasseforti).send(
       {
         from: accounts[0],
-        to: "0x3B8fd72BE95751F3991cc60EE18B778ABA56268E",
-        value: web3.utils.toWei(this.state.amt),
       },
       function (err, transactionHash) {
         if (err) {
           console.log(err);
         } else {
+          /*           this.setState({ bal: this.state.amt });
+           */ console.log(transactionHash);
+        }
+      }
+    );
+  };
+
+  deposita = async () => {
+    const { accounts, contract, web3 } = this.state;
+
+    await contract.methods.deposit(this.state.idCasseforti).send(
+      {
+        from: accounts[0],
+        value: web3.utils.toWei(this.state.amt, "ether"),
+      },
+      function (err, transactionHash) {
+        if (err) {
+          console.log(err);
+        } else {
+          /* this.setState({ bal: this.state.amt }); */
           console.log(transactionHash);
         }
       }
@@ -110,29 +129,8 @@ class App extends Component {
 
   controlla = async () => {
     const { contract } = this.state;
-
-    // Stores a given value, 5 by default.
     const amt = await contract.methods.getBalance().call();
     console.log(amt);
-
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
-  };
-
-  preleva = async () => {
-    const { accounts, contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    await contract.methods.withdraw().send({ from: accounts[0] });
-    console.log("Hai cliccato sul link.");
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
   };
 
   convertiData = () => {
@@ -163,7 +161,13 @@ class App extends Component {
           </Route>
 
           <Route exact path="/home">
-            <Home accounts={accounts} rete={rete} balance={balance} />
+            <Home
+              accounts={accounts}
+              rete={rete}
+              balance={balance}
+              bal={this.state.bal}
+              casseforti={this.state.casseforti}
+            />
           </Route>
 
           <Route path="/Deposita">
@@ -173,6 +177,7 @@ class App extends Component {
               value={this.state.amt}
               onValueChange={this.onValueChange.bind(this, "amt")}
               deposita={this.deposita}
+              preleva={this.preleva}
             />
           </Route>
         </Switch>
