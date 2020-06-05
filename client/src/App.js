@@ -1,15 +1,11 @@
 import React, { Component } from "react";
 import Amazoff from "./contracts/Amazoff.json";
 import getWeb3 from "./getWeb3";
-/* import Navbar from "./components/Nav/Navbar";
-import Info from "../src/components/home/info";
-import Deposito from "../src/components/home/deposito"; */
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import CreaDeposito from "./pages/CreaDeposito";
 import Home from "./pages/Home";
 import Preleva from "./pages/Preleva";
-
 import "./App.css";
 
 class App extends Component {
@@ -25,21 +21,10 @@ class App extends Component {
       rete: null,
       amt: 0,
       bal: 0,
+      idCasseforti: 8,
     };
     this.deposita = this.deposita.bind(this);
   }
-
-  /*   componentWillUpdate(newProps, newState) {
-    console.log("called before");
-    console.log("NewProps", newProps);
-    console.log("NewState", newState);
-  }
-
-  componentDidUpdate(preProps, preState) {
-    console.log("call after the render Method()");
-    console.log("PreProps", preProps);
-    console.log("PreState", preState);
-  } */
 
   componentDidMount = async () => {
     try {
@@ -81,7 +66,9 @@ class App extends Component {
     }
   };
   //inizio
-
+  onValueChange(key, event) {
+    this.setState({ [key]: event.target.value });
+  }
   //------------fine-----------------------
 
   setFriday = async () => {
@@ -89,50 +76,47 @@ class App extends Component {
     await contract.methods.setBlackFriday(giorno).send({ from: accounts[0] });
   };
 
-  deposita = async () => {
-    const { accounts, web3 } = this.state;
-    web3.eth.sendTransaction(
+  preleva = async () => {
+    const { accounts, contract } = this.state;
+
+    await contract.methods.withdraw(this.state.idCasseforti).send(
       {
         from: accounts[0],
-        to: "0x3B8fd72BE95751F3991cc60EE18B778ABA56268E",
-        value: web3.utils.toWei(this.state.amt),
       },
       function (err, transactionHash) {
         if (err) {
           console.log(err);
         } else {
+          /*           this.setState({ bal: this.state.amt });
+           */ console.log(transactionHash);
+        }
+      }
+    );
+  };
+
+  deposita = async () => {
+    const { accounts, contract, web3 } = this.state;
+
+    await contract.methods.deposit(this.state.idCasseforti).send(
+      {
+        from: accounts[0],
+        value: web3.utils.toWei(this.state.amt, "ether"),
+      },
+      function (err, transactionHash) {
+        if (err) {
+          console.log(err);
+        } else {
+          /* this.setState({ bal: this.state.amt }); */
           console.log(transactionHash);
         }
       }
     );
-    window.location.reload();
   };
 
   controlla = async () => {
     const { contract } = this.state;
-
-    // Stores a given value, 5 by default.
     const amt = await contract.methods.getBalance().call();
     console.log(amt);
-
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
-  };
-
-  preleva = async () => {
-    const { accounts, contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    await contract.methods.withdraw().send({ from: accounts[0] });
-    console.log("Hai cliccato sul link.");
-    // Get the value from the contract to prove it worked.
-    /* const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response }); */
   };
 
   convertiData = () => {
@@ -142,13 +126,9 @@ class App extends Component {
     this.setFriday();
   };
 
-  onValueChange(key, event) {
-    this.setState({ [key]: event.target.value }); // cambia valore di dove click
-  }
-
   render() {
-    console.log(this.state.amt);
     const { accounts, rete, balance } = this.state;
+    console.log(this.state.amt);
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
@@ -167,16 +147,17 @@ class App extends Component {
           </Route>
 
           <Route exact path="/home">
-            <Home accounts={accounts} rete={rete} balance={balance} />
+            <Home accounts={accounts} rete={rete} balance={balance} bal={this.state.bal} casseforti={this.state.casseforti} />
           </Route>
 
           <Route path="/Deposita">
             <CreaDeposito
-              deposita={this.deposita}
-              onValueChange={this.onValueChange.bind(this, "amt")}
-              value={this.state.amt}
               rete={rete}
               balance={balance}
+              value={this.state.amt}
+              onValueChange={this.onValueChange.bind(this, "amt")}
+              deposita={this.deposita}
+              preleva={this.preleva}
             />
           </Route>
           <Route parh="Preleva">
