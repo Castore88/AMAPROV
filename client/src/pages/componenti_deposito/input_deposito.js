@@ -6,7 +6,7 @@ class InputD extends Component {
     return (
       <div className={classes.InfoD}>
         <input className={classes.Titolo} placeholder="Titolo cassaforte" type="text"></input>
-        <input className={classes.Timer} type="time"></input>
+        <input className={classes.Timer} type="number"></input>
         <input onChange={this.props.onValueChange} value={this.props.value} className={classes.Eth} placeholder="00.00 Eth" type="number"></input>
       </div>
     );

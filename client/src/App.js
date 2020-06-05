@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import CreaDeposito from "./pages/CreaDeposito";
 import Home from "./pages/Home";
+import Preleva from "./pages/Preleva";
 
 import "./App.css";
 
@@ -28,12 +29,17 @@ class App extends Component {
     this.deposita = this.deposita.bind(this);
   }
 
-  componentDidUpdate(this.state.balance) {
-    // Utilizzo tipico (non dimenticarti di comparare le props):
-    if (this.state.balance !== propsPrecedenti.idUtente) {
-      this.fetchData(this.props.idUtente);
-    }
+  /*   componentWillUpdate(newProps, newState) {
+    console.log("called before");
+    console.log("NewProps", newProps);
+    console.log("NewState", newState);
   }
+
+  componentDidUpdate(preProps, preState) {
+    console.log("call after the render Method()");
+    console.log("PreProps", preProps);
+    console.log("PreState", preState);
+  } */
 
   componentDidMount = async () => {
     try {
@@ -172,6 +178,9 @@ class App extends Component {
               rete={rete}
               balance={balance}
             />
+          </Route>
+          <Route parh="Preleva">
+            <Preleva rete={rete} />
           </Route>
         </Switch>
       </Router>

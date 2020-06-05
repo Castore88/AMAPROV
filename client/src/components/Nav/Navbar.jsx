@@ -10,7 +10,12 @@ class Navbar extends Component {
   width: 100%;
   height: 55px;
   border-bottom: 2px solid #f1f1f1;
-  position: relative;
+  position:sticky;
+  
+  
+  
+    
+    
 
  
 
