@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "moment": "^2.26.0",
     "react": "16.11.0",
     "react-burger-menu": "^2.6.13",
     "react-dom": "16.11.0",
+    "react-moment": "^0.9.7",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.2.0",
+    "shortid": "^2.2.15",
     "styled-components": "^5.1.1",
     "web3": "1.2.2"
   },

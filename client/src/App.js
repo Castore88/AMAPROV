@@ -12,7 +12,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      storageValue: 0,
       web3: null,
       accounts: null,
       contract: null,
@@ -21,13 +20,21 @@ class App extends Component {
       rete: null,
       amt: 0,
       bal: 0,
-      idCasseforti: 8,
+      idCasseforti: [],
+      loading: false,
     };
     this.deposita = this.deposita.bind(this);
     this.preleva = this.preleva.bind(this);
-    this.setFriday = this.setFriday.bind(this);
     this.controlla = this.controlla.bind(this);
+    this.addBank = this.addBank.bind(this);
+    this.setOra = this.setOra.bind(this);
   }
+
+  addBank = (id) => {
+    this.setState({
+      idCasseforti: [id, ...this.state.idCasseforti],
+    });
+  };
 
   componentDidMount = async () => {
     try {
@@ -76,52 +83,85 @@ class App extends Component {
       console.error(error);
     }
   };
-  //inizio
+
+  //inizio Cambiare il valore delle imput
   onValueChange(key, event) {
     this.setState({ [key]: event.target.value });
   }
   //------------fine-----------------------
 
-  setFriday = async () => {
-    const { accounts, contract, giorno } = this.state;
-    await contract.methods.setBlackFriday(giorno).send({ from: accounts[0] });
+  //----------------Richiamo per prendere il timestamp dalla funzione del contratto
+  setOra = async () => {
+    const { contract } = this.state;
+    let timestamp;
+    await contract.methods
+      .getNow()
+      .call()
+      .then(
+        (result) => (result = timestamp)
+        /* contract.methods
+          .setBlackFriday(result, this.state.idCasseforti)
+          .send({ from: accounts[0] }) */
+      );
+    console.log(timestamp);
   };
+  //-----------------------------------------
 
+  //-----------------Funzione per prelevare--------------------
   preleva = async () => {
     const { accounts, contract } = this.state;
 
-    await contract.methods.withdraw(this.state.idCasseforti).send(
-      {
-        from: accounts[0],
-      },
-      function (err, transactionHash) {
-        if (err) {
-          console.log(err);
-        } else {
-          /*           this.setState({ bal: this.state.amt });
-           */ console.log(transactionHash);
+    await contract.methods
+      .withdraw(this.state.idCasseforti)
+      .send(
+        {
+          from: accounts[0],
+        },
+        function (err, transactionHash) {
+          if (err) {
+            console.log(err);
+          } else {
+            /*           this.setState({ bal: this.state.amt });
+             */ console.log(transactionHash);
+          }
         }
-      }
-    );
+      )
+      .on("confirmation", (reciept) => {
+        this.setState({ loading: true });
+      });
   };
+  //-----------------Funzione per prelevare--------------------
 
+  //-----------------Funzione per depositare e fissare il tempo--------------------
   deposita = async () => {
     const { accounts, contract, web3 } = this.state;
 
-    await contract.methods.deposit(this.state.idCasseforti).send(
-      {
-        from: accounts[0],
-        value: web3.utils.toWei(this.state.amt, "ether"),
-      },
-      function (err, transactionHash) {
-        if (err) {
-          console.log(err);
-        } else {
-          /* this.setState({ bal: this.state.amt }); */
-          console.log(transactionHash);
+    //-----------------Deposito--------------------
+    await contract.methods
+      .deposit(this.state.idCasseforti)
+      .send(
+        {
+          from: accounts[0],
+          value: web3.utils.toWei(this.state.amt, "ether"),
+        },
+        function (err, transactionHash) {
+          if (err) {
+            console.log(err);
+          } else {
+            /* this.setState({ bal: this.state.amt }); */
+            console.log(transactionHash);
+          }
         }
-      }
-    );
+      )
+      .on("confirmation", () => {
+        web3.eth.getBalance(accounts[0], function (error, result) {
+          if (!error) {
+            console.log(error);
+          } else {
+            this.setState({ balance: result });
+          }
+        });
+      });
   };
 
   controlla = async () => {
@@ -130,28 +170,14 @@ class App extends Component {
     console.log(amt);
   };
 
-  convertiData = () => {
-    const data = document.getElementById("data").value;
-    const timestamp = Date.parse(data);
-    this.setState({ giorno: timestamp });
-    this.setFriday();
-  };
-
   render() {
-    const { accounts, rete, balance } = this.state;
+    const { accounts, rete, balance, web3 } = this.state;
     console.log(this.state.amt);
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <Router>
-        {/*
-            A <Switch> looks through all its children <Route>
-            elements and renders the first one whose path
-            matches the current URL. Use a <Switch> any time
-            you have multiple routes, but you want only one
-            of them to render at a time
-          */}
         <Switch>
           <Route exact path="/">
             <Login />
@@ -163,7 +189,8 @@ class App extends Component {
               rete={rete}
               balance={balance}
               bal={this.state.bal}
-              casseforti={this.state.casseforti}
+              casseforti={this.state.idCasseforti}
+              web3={web3}
             />
           </Route>
 
@@ -173,12 +200,19 @@ class App extends Component {
               balance={balance}
               value={this.state.amt}
               onValueChange={this.onValueChange.bind(this, "amt")}
+              giorno={this.state.giorno}
+              onDateChange={this.onValueChange.bind(this, "giorno")}
+              setOra={this.setOra}
               deposita={this.deposita}
-              preleva={this.preleva}
+              onSubmit={this.addBank}
             />
           </Route>
           <Route parh="Preleva">
-            <Preleva rete={rete} />
+            <Preleva
+              rete={rete}
+              preleva={this.preleva}
+              idCasseforti={this.state.idCasseforti}
+            />
           </Route>
         </Switch>
       </Router>

@@ -7,10 +7,9 @@ class Deposito extends Component {
     console.log(this.props);
     return (
       <div className={classes.Creab}>
-        <button className={classes.Crea}>
-          {" "}
-          <Link to="/deposita">Crea il tuo deposito</Link>
-        </button>
+        <Link to="/deposita">
+          <button className={classes.Crea}> Crea il tuo deposito</button>
+        </Link>
       </div>
     );
   }
