@@ -6,7 +6,9 @@ class Btnpreleva extends Component {
     return (
       <div className={classes.InfoD}>
         <h3>La cassaforte è sbloccata preleva tutti i tuoi Eth </h3>
-        <button className={classes.Preleva}>Preleva</button>
+        <button className={classes.Preleva} onClick={this.props.preleva}>
+          Preleva
+        </button>
       </div>
     );
   }

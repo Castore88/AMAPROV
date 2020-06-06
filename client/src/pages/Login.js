@@ -6,7 +6,10 @@ import classes from "./login_components/Connetti.module.css";
 
 export default class Login extends Component {
   connectMm = (e) => {
-    if (typeof window.ethereum !== "undefined" || typeof window.web3 !== "undefined") {
+    if (
+      typeof window.ethereum !== "undefined" ||
+      typeof window.web3 !== "undefined"
+    ) {
       // Web3 browser user detected. You can now use the provider.
       const provider = window["ethereum"] || window.web3.current;
 
